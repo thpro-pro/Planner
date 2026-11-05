@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Planificador UPTP 2027</title>
+<style>
+:root{--bg:#f5f6fa;--ink:#16202f;--mut:#5b677c;--card:#fff;--ln:#dde2ec;--m:#2557d6;--f:#0b8a68;--i:#8b3fd1;--w:#c2410c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,"Segoe UI",sans-serif}
+.w{max-width:980px;margin:auto;padding:0 12px}
+header{background:var(--ink);color:#fff;padding:18px 0 14px}
+h1{margin:0;font:700 24px Georgia,serif}h2{font:700 18px Georgia,serif;margin:18px 0 8px}
+.sub{color:#b9c3d6;font-size:13px;margin:2px 0 12px}
+.st{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.k{background:#223048;border-radius:8px;padding:8px 10px}.k b{font-size:20px;display:block}.k small{color:#b9c3d6}
+.bar{height:7px;background:#364763;border-radius:4px;overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:#7fb0ff}
+nav{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+nav button,.btn{border:1px solid var(--ln);background:#fff;border-radius:8px;padding:7px 12px;cursor:pointer;font:inherit}
+nav button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn.d{color:#b91c1c}.f{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+select,input,textarea{font:inherit;border:1px solid var(--ln);border-radius:8px;padding:6px 8px;background:#fff;max-width:100%}
+textarea{width:100%;min-height:60px}
+.wk{margin:16px 0 6px;font-weight:700}.wk small{color:var(--mut);font-weight:400}
+.day{background:var(--card);border:1px solid var(--ln);border-radius:10px;margin-bottom:8px}
+.day.today{border-color:var(--m);box-shadow:0 0 0 2px #2557d633}
+.day>summary{padding:10px 12px;cursor:pointer;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.day>summary b{min-width:92px}.pill{font-size:12px;padding:1px 8px;border-radius:99px;background:#eef1f7;color:var(--mut)}
+.act{border-top:1px solid var(--ln);padding:8px 12px}.act.ok .t{text-decoration:line-through;color:var(--mut)}
+.r1{display:flex;gap:8px;align-items:flex-start}.r1 input{margin-top:5px;width:18px;height:18px}
+.tg{font-size:12px;color:#fff;border-radius:5px;padding:0 6px;margin-right:6px}
+.m{background:var(--m)}.f_{background:var(--f)}.i_{background:var(--i)}
+.det{margin:6px 0 0 26px;font-size:14px;color:#2b374c}.det a{margin-right:10px}
+.pa{color:var(--w);font-weight:600}.mini{font-size:13px;color:var(--mut)}
+table{width:100%;border-collapse:collapse;background:#fff;font-size:14px}td,th{border:1px solid var(--ln);padding:5px 7px;text-align:left;vertical-align:top}
+.card{background:#fff;border:1px solid var(--ln);border-radius:10px;padding:12px;margin-bottom:10px}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
+.hide{display:none}.note{background:#fff7e6;border:1px solid #f1d28a;border-radius:8px;padding:8px 10px;font-size:13px;margin:10px 0}
+</style><style>
+:root{--bg:#fff4f8;--ink:#42304f;--mut:#7d6b8c;--card:#fff;--ln:#f0d9e6;--m:#4f7be8;--f:#1fa37f;--i:#9a5be0;--w:#d9560b}
+body{background:var(--bg);font-family:"Nunito","Quicksand",ui-rounded,"Segoe UI",system-ui,sans-serif}
+header{background:linear-gradient(120deg,#ffc2dc,#d9c6ff 55%,#bfe6ff);color:var(--ink);border-radius:0 0 28px 28px}
+h1,h2{font-family:inherit;font-weight:800}.sub{color:#6a5679}
+.k{background:rgba(255,255,255,.7);border-radius:16px}.k small{color:var(--mut)}
+.bar{background:#fff;border-radius:99px}.bar i{background:linear-gradient(90deg,#ff7fb0,#a98bff)}
+nav button,.btn,select,input,textarea{border-radius:14px;border-color:var(--ln)}
+nav button.on{background:#a98bff;border-color:#a98bff}
+.btn{background:#fff0f6}.btn:hover{background:#ffe0ee}
+.day,.card,table{border-radius:16px;border-color:var(--ln)}table{overflow:hidden}
+.day.today{border-color:#ff7fb0;box-shadow:0 0 0 3px #ff7fb033}
+.tg{border-radius:99px;padding:1px 9px}input[type=checkbox]{accent-color:#ff6fa5}
+.r1 input{border-radius:50%}.note{background:#fff0f6;border-color:#f6c6dc;border-radius:14px}
+pre{white-space:pre-wrap;background:#faf5ff;border:1px dashed #cdb6f2;border-radius:12px;padding:10px;font:13px/1.45 ui-monospace,Consolas,monospace;margin:6px 0}
+</style>
+</head><body>
+<header><div class="w"><h1>✨ Planificador UPTP 2027 · Ingeniería en Informática 💻</h1>
+<div class="sub">5 nov 2026 → 30 ene 2027 · Examen escrito: 40 preguntas de opción múltiple, 2 h, en inglés, sin calculadora (Res. UPTP 228/2026)</div>
+<div class="st" id="stats"></div></div></header>
+<div class="w">
+<nav id="nav"><button data-t="plan" class="on">Plan diario</button><button data-t="syl">Temario ↔ libro</button><button data-t="perf">Mi rendimiento</button><button data-t="err">Repaso de errores</button><button data-t="prompts">💌 Prompts para IA</button><button data-t="cfg">Copia de seguridad</button></nav>
+<div class="note">Los enlaces de YouTube son <b>búsquedas</b> por canal y tema (no videos verificados uno por uno). Las preguntas “P#” son del Examen 2026 oficial (PDF adjunto); los ejercicios del libro son los impares de cada sección (respuestas al final de Stewart). Prioridad (Alta/Media/Baja) = importancia para el examen, no dificultad: es una recomendación de estudio, no un dato oficial.</div>
+<section id="plan"><div class="f">
+<select id="fs"><option value="">Todas las materias</option><option value="m">Matemáticas</option><option value="f">Física</option><option value="i">Inglés</option></select>
+<select id="fe"><option value="">Todas las etapas</option><option value="1">1 Fundamentos</option><option value="2">2 Temas centrales</option><option value="3">3 Integración</option><option value="4">4 Práctica de examen</option><option value="5">5 Simulacros y repaso</option></select>
+<select id="fw"></select>
+<select id="fst"><option value="">Pendientes y hechas</option><option value="p">Solo pendientes</option><option value="h">Solo terminadas</option></select>
+<button class="btn" id="tod">Ir a hoy</button></div><div id="days"></div></section>
+<section id="syl" class="hide"></section>
+<section id="perf" class="hide"></section>
+<section id="err" class="hide"></section>
+<section id="prompts" class="hide"></section>
+<section id="cfg" class="hide"></section>
+</div>
+<script>
+const START=new Date(2026,10,5),EXAM=new Date(2027,0,30),N=87,KEY='uptp27_v1';
+const YT='https://www.youtube.com/results?search_query=';
+/* ---------- DATOS ---------- */
+// d=días, t=tema, c=capítulo/secciones Stewart 7.ª ed. (verificado en el índice del PDF), k=conceptos y procedimientos, p=prioridad, q/e=búsqueda ES/EN, r=preguntas Examen 2026, w=por qué juntos y errores típicos
+const M=[
+{d:2,t:'Números reales, exponentes y radicales',c:'1.1–1.2',k:'propiedades de los reales, intervalos, valor absoluto, leyes de exponentes, exponentes racionales, racionalizar',p:'A',q:'leyes de los exponentes y radicales',e:'exponents and radicals',r:'P3, P12, P16',w:'Comparten las reglas de potencias. Errores: (a+b)²=a²+b², signos con exponentes negativos, √(x²)=x en vez de |x|.'},
+{d:4,t:'Expresiones algebraicas, factorización y fracciones algebraicas',c:'1.3–1.4',k:'productos notables, factor común, diferencia de cuadrados, trinomios, agrupación, simplificar y operar fracciones',p:'A',q:'factorizacion de polinomios',e:'factoring polynomials',r:'P1, P11, P15',w:'Factorizar es la herramienta para simplificar y resolver. Errores: cancelar sumandos en vez de factores, perder el signo al sacar factor común.'},
+{d:3,t:'Ecuaciones y modelado con ecuaciones',c:'1.5, 1.7',k:'lineales, cuadráticas (factorización, fórmula general, completar cuadrado), con radicales, con valor absoluto, problemas de enunciado',p:'A',q:'ecuaciones cuadraticas y con radicales',e:'solving equations algebra',r:'P19',w:'Mismo procedimiento de despeje. Error: no verificar soluciones extrañas.'},
+{d:2,t:'Números complejos',c:'1.6',k:'i, forma a+bi, suma, producto, conjugado, división, raíces de cuadráticas',p:'M',q:'numeros complejos operaciones',e:'complex numbers operations',r:'Sin pregunta en 2026: busca en los exámenes 2019–2025',w:'Prerrequisito de 3.5 y 8.3. Error: i²=1.'},
+{d:3,t:'Desigualdades y solución gráfica',c:'1.8, 1.11',k:'lineales, compuestas, con valor absoluto, no lineales con tabla de signos, interpretación gráfica',p:'A',q:'desigualdades lineales y cuadraticas',e:'solving inequalities',r:'P33, P39',w:'Igual que ecuaciones pero el signo cambia al multiplicar por negativo. Error: pasar multiplicando una expresión sin conocer su signo.'},
+{d:4,t:'Plano cartesiano, círculos y rectas',c:'1.9–1.10',k:'distancia, punto medio, ecuación del círculo, pendiente, formas de la recta, paralelas/perpendiculares, intersección',p:'A',q:'ecuacion de la recta y circunferencia',e:'equation of a line and circle',r:'P9, P28, P30, P32',w:'Geometría analítica base de funciones y cónicas. Error: signos del centro (x−h).'},
+{d:3,t:'Funciones: dominio, rango y gráficas',c:'2.1–2.4',k:'definición, dominio/rango, recta vertical, crecimiento, máximos/mínimos, tasa de cambio promedio',p:'A',q:'dominio y rango de una funcion',e:'domain and range of functions',r:'',w:'Lenguaje común de todo lo que sigue. Error: ignorar restricciones de raíces y denominadores.'},
+{d:3,t:'Transformaciones, composición e inversas',c:'2.5–2.8',k:'función lineal, traslaciones/reflexiones, (f∘g)(x), uno a uno, inversa; inyectiva, sobreyectiva, biyectiva',p:'A',q:'composicion de funciones y funcion inversa',e:'composite and inverse functions',r:'',w:'Todas operan sobre funciones. Error: confundir f(g(x)) con g(f(x)) y f⁻¹ con 1/f.'},
+{d:3,t:'Cuadráticas y polinomios; división',c:'3.1–3.3',k:'vértice, forma estándar, gráfica de polinomios, comportamiento en los extremos, división larga y sintética, teorema del residuo',p:'A',q:'division sintetica y teorema del residuo',e:'polynomial long division synthetic division',r:'P15',w:'Polinomios + división para factorizar después. Error: olvidar términos con coeficiente 0.'},
+{d:3,t:'Ceros reales y complejos; Teorema Fundamental del Álgebra',c:'3.4–3.5',k:'ceros racionales, Descartes, cotas, ceros complejos conjugados, factorización completa',p:'M',q:'ceros racionales de polinomios',e:'rational zeros theorem',r:'',w:'Usa división (3.3) y complejos (1.6).'},
+{d:2,t:'Funciones racionales, asíntotas y desigualdades',c:'3.6–3.7',k:'asíntotas vertical/horizontal/oblicua, gráfica, desigualdades con tabla de signos',p:'A',q:'asintotas de funciones racionales',e:'rational functions asymptotes',r:'',w:'Racionales = factorización + signos. Error: asíntota donde hay hueco.'},
+{d:4,t:'Exponenciales, logaritmos y escalas logarítmicas',c:'4.1–4.7',k:'eˣ, log y ln, cambio de base, leyes, ecuaciones exp/log, crecimiento/decaimiento, interés continuo, pH/decibeles/Richter',p:'A',q:'leyes de los logaritmos y ecuaciones logaritmicas',e:'logarithms laws and equations',r:'P8, P22, P23, P26, P40',w:'Exp y log son inversas: se estudian juntas. Error: log(a+b)=log a+log b; olvidar el dominio de log.'},
+{d:4,t:'Trigonometría: círculo unitario, triángulos, gráficas e inversas',c:'5.1–5.6, 6.1–6.4',k:'radianes↔grados, círculo unitario, valores notables sin calculadora, gráficas, amplitud/periodo/fase, sen⁻¹, cos⁻¹, tan⁻¹',p:'A',q:'circulo unitario y funciones trigonometricas',e:'unit circle trigonometry',r:'P6, P7, P34',w:'Misma idea vista como círculo y como triángulo. Error: calculadora en modo equivocado, rango de inversas.'},
+{d:2,t:'Ley de senos y de cosenos',c:'6.5–6.6',k:'resolver triángulos, caso ambiguo, áreas, aplicaciones',p:'A',q:'ley de senos y ley de cosenos',e:'law of sines and cosines',r:'P21',w:'Extiende los triángulos rectángulos. Error: caso ambiguo.'},
+{d:3,t:'Trigonometría analítica: identidades y ecuaciones',c:'7.1–7.5',k:'identidades, suma/resta, ángulo doble y mitad, producto-suma, ecuaciones trigonométricas',p:'A',q:'identidades trigonometricas y ecuaciones trigonometricas',e:'trig identities and equations',r:'P6, P14',w:'Las fórmulas se aplican tanto para simplificar como para resolver. Error: dividir por sen x y perder soluciones.'},
+{d:3,t:'Polares, complejos en forma polar y paramétricas',c:'8.1–8.4',k:'polar↔cartesiano, curvas polares básicas, módulo/argumento, De Moivre, ecuaciones paramétricas',p:'M',q:'coordenadas polares y teorema de De Moivre',e:'polar coordinates De Moivre theorem',r:'P27',w:'Usa trigonometría y complejos. Error: cuadrante del argumento.'},
+{d:3,t:'Vectores 2D/3D, producto punto y cruz, rectas y planos',c:'9.1–9.6',k:'componentes, magnitud, producto punto, ángulo, proyección, geometría 3D, producto cruz, rectas y planos',p:'A',q:'vectores producto punto y producto cruz',e:'vectors dot product cross product',r:'P4, P10, P35, P36',w:'Se estudian juntos porque comparten operaciones; sirven en Física. Error: mezclar producto punto y cruz.'},
+{d:3,t:'Sistemas lineales y no lineales, fracciones parciales, sistemas de desigualdades',c:'10.1, 10.2, 10.7, 10.8, 10.9',k:'sustitución, eliminación, sistemas 3×3, no lineales, descomposición en fracciones parciales, regiones',p:'A',q:'sistemas de ecuaciones y fracciones parciales',e:'systems of equations partial fractions',r:'P24, P25',w:'Mismo trabajo de eliminar variables. Error: perder soluciones al elevar al cuadrado.'},
+{d:2,t:'Matrices y determinantes',c:'10.3–10.6',k:'Gauss-Jordan, suma/producto/potencia/transpuesta, inversa, determinantes, Cramer',p:'A',q:'matrices inversa y determinantes',e:'matrices inverse determinant',r:'P17, P18',w:'Álgebra matricial completa. Error: AB≠BA y dimensiones.'},
+{d:3,t:'Secciones cónicas',c:'11.1–11.6',k:'parábola, elipse, hipérbola, cónicas desplazadas, ecuación general, rotación, ecuaciones polares',p:'A',q:'secciones conicas parabola elipse hiperbola',e:'conic sections ellipse hyperbola parabola',r:'P2, P28, P37',w:'Completar cuadrados (álgebra) + geometría. Error: confundir a² y b².'},
+{d:2,t:'Sucesiones, series y teorema del binomio',c:'12.1–12.3, 12.6 (12.4 y 12.5: baja prioridad)',k:'sucesiones, notación Σ, aritméticas, geométricas, sumas, binomio',p:'A',q:'progresiones aritmeticas y geometricas',e:'arithmetic geometric sequences series',r:'P13, P20, P23, P29, P31, P38',w:'Fórmulas de suma comparten notación. Error: n−1 en aₙ.'},
+{d:2,t:'Límites, derivada y áreas (introducción)',c:'13.1–13.5',k:'límites numéricos/algebraicos, laterales, al infinito, tangente y derivada como límite, áreas y sumas de Riemann',p:'M',q:'limites algebraicos factorizacion racionalizacion',e:'limits algebraically precalculus',r:'P5',w:'Usa álgebra de 1.3–1.4. Error: evaluar 0/0 sin factorizar.'}];
+// Física: [sesiones, tema, contenido (Anexo I B3), búsqueda ES, búsqueda EN]
+const P=[[3,'Magnitudes, unidades SI y vectores','fundamentales y derivadas, escalares y vectoriales, SI, suma, resta, producto escalar y vectorial','magnitudes y unidades sistema internacional vectores','physics vectors units'],
+[4,'Cinemática: MRU y MRUA','posición, rapidez media, aceleración, ecuaciones y gráficos','movimiento rectilineo uniforme y uniformemente acelerado','kinematics physics'],
+[4,'Dinámica y leyes de Newton','inercia, F=ma, acción y reacción, peso y rozamiento','leyes de newton problemas rozamiento','newtons laws problems friction'],
+[2,'Equilibrio de fuerzas','concurrentes y paralelas, momento de una fuerza','equilibrio de fuerzas y momento','torque equilibrium physics'],
+[3,'Energía, trabajo, potencia','cinética, potencial, mecánica, conservativos, trabajo, potencia, rendimiento','trabajo energia potencia problemas','work energy power physics'],
+[3,'Hidrostática','densidad, presión, Pascal, Arquímedes, flotación','hidrostatica presion arquimedes','fluid pressure buoyancy physics'],
+[3,'Termometría, calorimetría y termodinámica','escalas, calor específico, capacidad térmica, 4 principios','calorimetria calor especifico termodinamica','heat specific heat thermodynamics'],
+[3,'Ondas y acústica','período, frecuencia, longitud de onda, reflexión, refracción, difracción, eco, Doppler','ondas sonido efecto doppler','waves sound doppler effect'],
+[2,'Óptica','reflexión, refracción, lentes, imágenes, luz blanca','optica lentes reflexion refraccion','optics lenses refraction'],
+[3,'Electricidad','átomo, ley de Coulomb, circuitos, ley de Ohm, asociación de resistencias, potencia','ley de coulomb ley de ohm circuitos','coulomb law ohm law circuits']];
+const EN=[['Vocabulario matemático en inglés: números y álgebra','Lista 25 términos (fraction, root, expand, factor, solve…) con ejemplo de cada uno y léelos en voz alta.','math vocabulary english','bbc learning english vocabulary'],
+['Vocabulario de funciones, trigonometría y vectores','25 términos (domain, range, slope, angle, dot product…); resuelve 5 ejercicios del libro leyendo el enunciado en inglés.','precalculus vocabulary','english with lucy vocabulary'],
+['Comprensión lectora de enunciados','Elige 8 preguntas de exámenes 2019–2026, traduce el enunciado sin diccionario y resuélvelas.','word problems precalculus','bbc learning english reading'],
+['Gramática para la entrevista','Presente, pasado, futuro y condicionales: escribe 10 oraciones sobre tus estudios y metas.','english grammar tenses','english with lucy grammar'],
+['Listening técnico','20 min de video de matemáticas o física en inglés con subtítulos; resumen de 5 líneas.','precalculus lesson','bbc learning english listening'],
+['Speaking: entrevista personal','Grábate 2 min: quién eres y por qué Ingeniería en Robótica; revisa gramática y pronunciación.','interview english answers','english with lucy speaking'],
+['Explicar procedimientos en inglés','Explica en voz alta (grabado) cómo resolver una ecuación y una identidad trigonométrica.','explain math steps english','english with lucy pronunciation'],
+['Vocabulario de física en inglés','25 términos (force, velocity, acceleration, energy, circuit…); explica 3 conceptos en inglés.','physics vocabulary','bbc learning english science vocabulary']];
+const INT=['Álgebra combinada: factorización + ecuaciones + desigualdades + sistemas (P1, P11, P15, P24, P25, P33, P39)','Funciones, exponenciales y logaritmos: modelado y despeje de parámetros (P8, P22, P23, P26, P40)','Trigonometría + polares + complejos: identidades, ecuaciones, triángulos, De Moivre (P6, P7, P14, P21, P27, P34)','Vectores + cónicas + geometría analítica (P2, P4, P10, P28, P30, P32, P35, P36, P37)','Sucesiones, binomio y límites (P5, P13, P20, P29, P31, P38)','Matrices + determinantes + preguntas de identificar el método (P17, P18, P24)','Modelado y problemas con parámetros: mezcla de 20 preguntas de tus temas flojos con 3 min cada una'];
+const EX=['2019 (versión A)','2020 (A)','2021 (A)','2022 (A)','2023','2024','2025'];
+const ST=['','Fundamentos','Temas centrales','Integración','Práctica de examen','Simulacros y repaso'];
+const stOf=i=>i<18?1:i<63?2:i<70?3:i<79?4:5;
+/* ---------- GENERADOR ---------- */
+const seqM=[];M.forEach((b,bi)=>{for(let p=0;p<b.d;p++)seqM.push([bi,p])});
+const seqP=[];P.forEach((b,bi)=>{for(let p=0;p<b[0];p++)seqP.push([bi,p])});
+const lk=(a,b,c)=>a.map(([n,s])=>`<a href="${YT}${encodeURIComponent(s)}" target="_blank" rel="noopener">${n} (búsqueda)</a>`).join('')+(c||'');
+const mlinks=b=>lk([['JulioProfe','julioprofe '+b.q],['Math2me','math2me '+b.q],['unicoos','unicoos '+b.q],['Khan Academy en Español','khan academy español '+b.q],['The Organic Chemistry Tutor (inglés)','the organic chemistry tutor '+b.e]]);
+const plinks=(q,e)=>lk([['JulioProfe','julioprofe '+q],['unicoos','unicoos fisica '+q],['Khan Academy en Español','khan academy español '+q],['The Organic Chemistry Tutor (inglés)','the organic chemistry tutor '+e]]);
+let pi=0,en=0;
+const day=i=>{const dt=new Date(2026,10,5+i),w=dt.getDay(),s=stOf(i),A=[],id=(k)=>`d${i}a${k}`;
+let obj='',phys=[1,3,6].includes(w);
+const add=(k,sub,min,t,det,links)=>A.push({id:id(k),sub,min,t,det,links:links||''});
+if(i<63){const [bi,p]=seqM[i],b=M[bi],last=p==b.d-1;
+obj=`Terminar la parte ${p+1}/${b.d} de «${b.t}» resolviendo sin ayuda y anotando errores.`;
+add(1,'m',60,`${b.t} · parte ${p+1}/${b.d}: teoría y ejemplos`,`Libro: Stewart ${b.c}. Aprende: ${b.k}. Teoría 15 min · copia y rehaz 3 ejemplos resueltos sin mirar 20 min · 3 ejercicios guiados 25 min. Prioridad: ${b.p=='A'?'Alta':b.p=='M'?'Media':'Baja'}. ${b.w}`,mlinks(b));
+add(2,'m',55,`${b.t} · ejercicios${last?' y tipo examen':''}`,`Resuelve 15 ejercicios impares de ${b.c} (respuestas al final del libro), 35 min.`+(last&&b.r?` Luego 20 min con preguntas del Examen 2026 (${b.r}), 3–4 min cada una sin calculadora.`:` Luego 20 min: elige 5 ejercicios y escribe qué procedimiento usas y por qué.`));
+if(w==0)add(3,'m',45,'Mini-evaluación semanal','10 ejercicios mezclados de lo visto esta semana en 25 min, sin libro; corrige 20 min y pasa los errores a «Repaso de errores».');
+else if(phys){const k=Math.min(pi,seqP.length-1);if(pi<seqP.length){const [x,y]=seqP[k],b2=P[x];add(3,'f',45,`Física: ${b2[1]} · sesión ${y+1}/${b2[0]}`,`Contenido oficial (Anexo I B3): ${b2[2]}. Aprende fórmula, unidades SI y despeje; resuelve 6 problemas con unidades y sin calculadora. Sin libro asignado: usa tu material.`,plinks(b2[3],b2[4]));}else add(3,'f',45,'Física: problemas mixtos','8 problemas de cualquier tema de física, con unidades y despejes.',plinks('problemas de fisica','physics problems'));pi++}
+else{const e=EN[en%EN.length];en++;add(3,'i',45,'Inglés: '+e[0],e[1],lk([['The Organic Chemistry Tutor','the organic chemistry tutor '+e[2]],['BBC Learning English / English with Lucy',e[3]]]));}
+const r1=i>=3?seqM[i-3]:null,r2=i>=7?seqM[i-7]:null;
+add(4,'m',25,'Repaso espaciado',`Sin libro: 3 ejercicios de «${r1?M[r1[0]].t:'fórmulas del cuaderno'}»${r2&&r2[0]!=(r1||[])[0]?` y 3 de «${M[r2[0]].t}»`:''} y repasa tus errores.`);}
+else if(i<70){const t=INT[i-63];obj='Combinar temas y elegir el procedimiento correcto.';add(1,'m',70,'Integración: '+t.split(' (')[0],'Resuelve 12 problemas combinados; antes de calcular, escribe qué método usarás. Preguntas del Examen 2026 sugeridas: '+(t.match(/\((.*)\)/)||[,''])[1]+'.');add(2,'m',50,'Problemas con tiempo','10 problemas de opción múltiple en 30 min sin calculadora; 20 min de corrección.');
+if(phys){add(3,'f',45,'Física: problemas mixtos y entrevista técnica','6 problemas + explica en voz alta un concepto con vocabulario técnico.',plinks('problemas de fisica','physics problems'))}else{const e=EN[en%EN.length];en++;add(3,'i',45,'Inglés: '+e[0],e[1],lk([['BBC Learning English / English with Lucy',e[3]]]))}
+add(4,'m',25,'Repaso de errores','Rehaz sin ayuda 5 ejercicios del cuaderno de errores.');}
+else if(i<79){const k=i-70;obj='Examen real con cronómetro y análisis de errores.';
+if(k<7){add(1,'m',60,`Examen ${EX[k]}: preguntas 1–20 en 55 min`,'Del zip entrance-exam-2019-2025. Sin calculadora, en inglés. Marca las que dejas en blanco: cada incorrecta resta puntos (en 2026: +2 / −0.5).');add(2,'m',60,`Examen ${EX[k]}: preguntas 21–40 en 55 min`,'Misma regla. Después corrige todo y clasifica cada error: concepto, procedimiento, cálculo, lectura del inglés.');}
+else{add(1,'m',60,k==7?'Rehacer preguntas falladas (días anteriores)':'Versiones B (2019–2022): 20 preguntas de tus temas débiles','Máximo 3 min por pregunta; si no ves el método, pasa a la siguiente.');add(2,'m',60,'Corrección y teoría de apoyo','Estudia en el libro las secciones de las preguntas falladas.');}
+if(phys)add(3,'f',30,'Entrevista técnica: explicar en voz alta','Elige 2 temas de física del Anexo I B3 y explícalos en 3 min cada uno con vocabulario técnico.');else add(3,'i',30,'Entrevista personal en inglés','Responde en voz alta (grabado): por qué esta carrera, tus fortalezas, un proyecto tuyo.');
+add(4,'m',25,'Repaso de errores','Actualiza la hoja de fórmulas y repasa tu lista de errores.');}
+else{const k=i-79;obj=['Simulacro completo en condiciones reales','Corregir y entender cada error','Simulacro completo','Corregir y entender cada error','Simulacro final con el Examen 2026','Corrección, hoja de fórmulas y oral','Repaso ligero: sin contenido nuevo','Día del examen'][k];
+const T=['Simulacro 1: examen 2021 versión B (40 preguntas, 120 min)','','Simulacro 2: examen 2022 versión B (40 preguntas, 120 min)','','Simulacro 3: Examen 2026 completo (40 preguntas, 120 min)'];
+if(k%2==0&&k<5){add(1,'m',120,T[k],'Sin calculadora ni diccionario; hoja de respuestas aparte; empieza por las que dominas.');add(2,'m',45,'Corrección inicial y registro del puntaje','Calcula aciertos, errores y puntaje y regístralos en «Mi rendimiento».');add(4,'m',15,'Respirar y anotar 3 aprendizajes','Qué gestión del tiempo cambiarías.');}
+else if(k<6){add(1,'m',105,'Corrección profunda','Para cada error: escribe el procedimiento correcto en «Repaso de errores» y rehaz el ejercicio.');add(2,'m',50,'Teoría de apoyo','Revisa en Stewart las secciones de tus 3 temas más débiles.');add(3,'i',30,'Inglés: entrevista personal','Repite en voz alta tu presentación de 2 min.');}
+else if(k==6){add(1,'m',60,'Repaso ligero','Repasa la hoja de fórmulas y 10 ejercicios fáciles; no estudies temas nuevos.');add(2,'f',45,'Física: repaso oral','Explica en voz alta 3 temas de física.');add(3,'i',30,'Inglés: speaking','Ensaya tu presentación personal.');add(4,'m',15,'Preparar logística','Documentos, lápices, ruta y horario; duerme temprano.');}
+else{add(1,'m',30,'Antes del examen','Hoja de fórmulas ligera, desayuno y llegada con tiempo. Gestión: primero las seguras; las dudosas, al final.');add(2,'m',120,'EXAMEN DE INGRESO UPTP','40 preguntas, 120 min, en inglés, sin calculadora ni diccionario.');}}
+return{i,dt,s,obj,A}};
+const DAYS=Array.from({length:N},(_,i)=>day(i));
+/* ---------- ESTADO ---------- */
+const empty=()=>({done:{},notes:{},rev:{},sims:[],errs:[],perf:{dom:'',cue:'',fre:''}});
+let S;try{S=Object.assign(empty(),JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){S=empty()}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){alert('No se pudo guardar en este navegador. Exporta tu progreso.')}};
+const $=s=>document.querySelector(s),esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fd=d=>d.toLocaleDateString('es-PY',{weekday:'short',day:'numeric',month:'short'});
+const SN={m:'🧮 Mat',f:'⚡ Fís',i:'💬 Ing'},SC={m:'m',f:'f_',i:'i_'};
+const all=DAYS.flatMap(d=>d.A);
+/* ---------- VISTAS ---------- */
+function stats(){const t=new Date();t.setHours(0,0,0,0);const left=Math.max(0,Math.round((EXAM-t)/864e5));
+const pc=l=>l.length?Math.round(100*l.filter(a=>S.done[a.id]).length/l.length):0,bar=v=>`<div class="bar"><i style="width:${v}%"></i></div>`,o=pc(all);
+const td=DAYS.find(d=>+d.dt==+t),tl=td?td.A.filter(a=>S.done[a.id]).length+'/'+td.A.length:'—';
+$('#stats').innerHTML=`<div class="k"><b>${left}</b><small>días para el examen</small></div><div class="k"><b>${o}%</b><small>progreso general (${all.filter(a=>S.done[a.id]).length}/${all.length})</small>${bar(o)}</div>`+['m','f','i'].map(s=>{const l=all.filter(a=>a.sub==s),v=pc(l);return `<div class="k"><b>${v}%</b><small>${{m:'Matemáticas',f:'Física',i:'Inglés'}[s]}</small>${bar(v)}</div>`}).join('')+`<div class="k"><b>${tl}</b><small>tareas de hoy</small></div>`}
+function plan(){const fs=$('#fs').value,fe=$('#fe').value,fw=$('#fw').value,fst=$('#fst').value,t=new Date();t.setHours(0,0,0,0);let h='',lw=-1;
+DAYS.forEach(d=>{const wk=Math.floor(d.i/7)+1;if(fe&&+fe!=d.s||fw&&+fw!=wk)return;
+const L=d.A.filter(a=>(!fs||a.sub==fs)&&(!fst||(fst=='h')==!!S.done[a.id]));if(!L.length)return;
+if(wk!=lw){lw=wk;h+=`<div class="wk">Semana ${wk} <small>· Etapa ${d.s}: ${ST[d.s]}</small></div>`}
+const n=d.A.filter(a=>S.done[a.id]).length,isT=+d.dt==+t;
+h+=`<details class="day${isT?' today':''}" data-d="${d.i}" ${isT?'open':''}><summary><b>${fd(d.dt)}</b><span class="pill">Etapa ${d.s}</span><span class="pill">${n}/${d.A.length}${n==d.A.length?' 🌸':''} · ${d.A.reduce((s,a)=>s+a.min,0)} min</span><span class="mini">${esc(d.obj)}</span></summary>`+
+L.map(a=>`<div class="act${S.done[a.id]?' ok':''}"><div class="r1"><input type="checkbox" data-c="${a.id}" ${S.done[a.id]?'checked':''}><div><span class="tg ${SC[a.sub]}">${SN[a.sub]}</span><span class="t">${esc(a.t)}</span> <span class="mini">${a.min} min</span>
+<details class="det"><summary class="mini">Detalles, recursos y notas</summary><p>${esc(a.det)}</p>${a.links?`<p>${a.links}</p>`:''}<label class="mini"><input type="checkbox" data-r="${a.id}" ${S.rev[a.id]?'checked':''}> Marcar para repasar</label><textarea data-n="${a.id}" placeholder="Notas: dificultades, errores…">${esc(S.notes[a.id]||'')}</textarea></details></div></div></div>`).join('')+'</details>'});
+$('#days').innerHTML=h||'<p>No hay actividades con esos filtros.</p>'}
+function syl(){$('#syl').innerHTML=`<h2>Temario oficial ↔ Stewart Precalculus 7.ª ed.</h2><p class="mini">El examen escrito evalúa Matemáticas (Anexo I, A). Física e Inglés corresponden al examen oral (entrevista personal y técnica, Anexo I, B). El capítulo 14 del libro (conteo y probabilidad) no figura en el Anexo I.</p><table><tr><th>Orden</th><th>Tema (agrupado)</th><th>Stewart</th><th>Conceptos y procedimientos</th><th>Prior.</th><th>Examen 2026</th><th>Por qué juntos / errores</th></tr>`+M.map((b,i)=>`<tr><td>${i+1}</td><td>${b.t}</td><td>${b.c}</td><td>${b.k}</td><td>${{A:'Alta',M:'Media',B:'Baja'}[b.p]}</td><td>${b.r}</td><td>${b.w}</td></tr>`).join('')+`</table><h2>Física (entrevista técnica, Anexo I B3)</h2><table>`+P.map(b=>`<tr><td>${b[1]}</td><td>${b[2]}</td></tr>`).join('')+'</table>'}
+function perf(){const p=S.perf;$('#perf').innerHTML=`<h2>Mi rendimiento</h2><div class="g"><div class="card"><b>Temas que domino</b><textarea data-p="dom">${esc(p.dom)}</textarea></div><div class="card"><b>Temas que todavía me cuestan</b><textarea data-p="cue">${esc(p.cue)}</textarea></div><div class="card"><b>Errores frecuentes</b><textarea data-p="fre">${esc(p.fre)}</textarea></div></div>
+<div class="card"><b>Temas marcados para repasar</b>${Object.keys(S.rev).filter(k=>S.rev[k]).map(k=>{const a=all.find(x=>x.id==k);return a?`<div>• ${esc(a.t)} <button class="btn" data-ur="${k}">Quitar</button></div>`:''}).join('')||'<div class="mini">Ninguno. Márcalos dentro de cada actividad.</div>'}</div>
+<div class="card"><b>Resultados de simulacros</b><div class="f"><input id="sn" placeholder="Nombre"><input id="sc" type="number" min="0" max="40" placeholder="Aciertos"><input id="si" type="number" min="0" max="40" placeholder="Incorrectas"><button class="btn" id="sa">Registrar</button></div><div class="mini">Puntaje al estilo del Examen 2026: 20 + 2·aciertos − 0.5·incorrectas (tomado de la hoja de instrucciones de 2026; confirma la regla de 2027).</div><table><tr><th>Simulacro</th><th>Aciertos</th><th>% de 40</th><th>Puntaje</th><th></th></tr>${S.sims.map((s,i)=>`<tr><td>${esc(s.n)}</td><td>${s.c}</td><td>${Math.round(100*s.c/40)}%</td><td>${20+2*s.c-0.5*s.i}</td><td><button class="btn" data-ds="${i}">Borrar</button></td></tr>`).join('')}</table></div>`}
+function err(){$('#err').innerHTML=`<h2>Repaso de errores</h2><div class="card g"><input id="et" placeholder="Tema"><input id="ee" placeholder="Ejercicio (ej. Examen 2024, P17)"><textarea id="ep" placeholder="Procedimiento correcto"></textarea><button class="btn" id="ea">Agregar</button></div>`+S.errs.map((e,i)=>`<div class="card"><label><input type="checkbox" data-er="${i}" ${e.ok?'checked':''}> <b>${esc(e.t)}</b> — ${esc(e.e)}</label><div>${esc(e.p)}</div><button class="btn d" data-de="${i}">Borrar</button></div>`).join('')}
+function cfg(){$('#cfg').innerHTML=`<h2>Copia de seguridad</h2><div class="card"><p>El progreso se guarda solo en este navegador (localStorage). Exporta un archivo para conservarlo o llevarlo a otra computadora.</p><div class="f"><button class="btn" id="ex">Exportar progreso</button><input type="file" id="im" accept=".json"><button class="btn d" id="rs">Reiniciar progreso</button></div></div>`}
+
+const CTX='Contexto: voy a rendir el examen de admisión 2027 de la UPTP (Ingeniería en Informática). Es un examen escrito de 40 preguntas de opción múltiple (opciones A–E, una sola correcta), 2 horas, EN INGLÉS, sin calculadora ni diccionario. Evalúa solo Matemáticas nivel precálculo (tipo Stewart): números reales y complejos, potencias y raíces, álgebra (ecuaciones, inecuaciones, factorización), geometría analítica, funciones polinomiales/racionales/exponenciales/logarítmicas, trigonometría, polares y paramétricas, vectores 2D/3D, sistemas y matrices, cónicas, sucesiones y series, binomio, límites, derivadas e introducción a áreas. Mi punto más débil es el álgebra.';
+const PR=[
+['Ejercicios por tema (10 preguntas)',CTX+`\n\nGenera 10 ejercicios de opción múltiple, redactados en inglés, sobre: [TEMA, ej. factorización y simplificación de fracciones algebraicas]. Dificultad: [fácil / media / similar al examen real]. Los números deben permitir resolverlos sin calculadora. Formato: pregunta numerada y opciones A–E. NO muestres respuestas ni soluciones: espera a que yo te envíe mis respuestas. Después corrígelas y explica paso a paso cada error.`],
+['Examen simulacro completo (40 preguntas)',CTX+`\n\nCrea un simulacro de 40 preguntas de opción múltiple, en inglés, con dificultad y estilo parecidos a un examen de ingreso real. Distribución aproximada por temas: álgebra y factorización 4, exponenciales y logaritmos 5, trigonometría 5, vectores 4, sucesiones, series y binomio 6, sistemas e inecuaciones 5, matrices 2, cónicas 3, geometría analítica 4, polares/complejos 1, límites 1. Incluye algunas preguntas con parámetros (a, b), otras donde haya que identificar el método y otras con figuras descritas con palabras. Entrégame SOLO las preguntas, sin respuestas. Cuando te escriba "Entregué" te mando mis respuestas y tú calculas mi puntaje (20 + 2 por acierto − 0.5 por error; las no respondidas no cuentan), me das el desglose por tema y me explicas cada error.`],
+['Mini simulacro (20 preguntas, 55 min)',CTX+`\n\nArma un mini simulacro de 20 preguntas en inglés, opciones A–E, sobre estos temas: [LISTA DE TEMAS QUE ESTUDIÉ ESTA SEMANA]. Ordénalas de fácil a difícil. Sin respuestas hasta que yo las envíe. Luego corrige, calcula el porcentaje de aciertos y dime qué 3 temas debo repasar primero.`],
+['Corregir mis errores y diagnosticar',`Te pego un ejercicio de práctica, mi respuesta y la respuesta correcta. Explícame en español, paso a paso, dónde me equivoqué y clasifica el error: concepto, procedimiento, cálculo o lectura del inglés. Después dame 5 ejercicios similares (de uno en uno, esperando mi respuesta) para comprobar que ya lo entendí.\n\nEjercicio: [PEGAR]\nMi respuesta y mi procedimiento: [PEGAR]\nRespuesta correcta: [PEGAR]`],
+['Álgebra desde cero (mi punto débil)',`Tengo bases débiles en álgebra y rindo un examen de ingreso universitario sin calculadora. Enséñame [TEMA, ej. factor común, trinomios, exponentes negativos] en español: explicación corta, 3 ejemplos resueltos paso a paso y los errores más comunes. Luego dame 8 ejercicios progresivos, UNO POR UNO, y espera mi respuesta antes de dar el siguiente. Si fallo, detecta mi error y explícalo antes de seguir.`],
+['Enunciados y vocabulario matemático en inglés',`El examen está en inglés y no puedo usar diccionario. Dame 20 términos matemáticos en inglés sobre [TEMA] con su significado en español y un ejemplo corto. Después dame 5 enunciados de problemas en inglés para que yo los traduzca y resuelva; corrige mi traducción y mi solución.`],
+['Verificar una solución (por si la IA se equivoca)',`Resuelve este ejercicio por DOS métodos distintos y comprueba el resultado sustituyendo. Si los métodos no coinciden, o el enunciado es ambiguo o tiene error, dímelo claramente en lugar de elegir una respuesta.\n\nEjercicio: [PEGAR]`],
+['Entrevista personal en inglés (Informática)',`Actúa como entrevistador de admisión de una universidad de ingeniería. Hazme UNA pregunta a la vez, en inglés, sobre mi motivación para estudiar Ingeniería en Informática, mi preparación, mis fortalezas y mis metas. Después de cada respuesta mía, corrígeme gramática y vocabulario, dime cómo sonar más claro y seguro, y haz la siguiente pregunta. Haz 8 preguntas.`],
+['Entrevista técnica de física',`Actúa como entrevistador técnico de ingreso a ingeniería. Hazme preguntas conceptuales y de cálculo mental sobre [TEMA: magnitudes y unidades SI, vectores, cinemática, leyes de Newton, energía y trabajo, hidrostática, calor, ondas, óptica o electricidad]. Una pregunta a la vez; evalúa si explico con claridad y vocabulario técnico correcto, corrígeme y sube la dificultad poco a poco.`]];
+function copy(t,b){const ok=()=>{const o=b.textContent;b.textContent='¡Copiado! 💖';setTimeout(()=>b.textContent=o,1500)};
+const fb=()=>{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');ok()}catch(e){alert('Selecciona el texto y cópialo a mano.')}a.remove()};
+navigator.clipboard?navigator.clipboard.writeText(t).then(ok,fb):fb()}
+function prompts(){$('#prompts').innerHTML='<h2>💌 Prompts para pedirle ejercicios y simulacros a una IA</h2><div class="note">Pega el prompt en Claude (u otra IA) y cambia lo que está entre [corchetes]. Los ejercicios generados por IA no son oficiales y pueden tener errores: confirma cada respuesta con otro método o con tus libros. Para práctica real también tienes los exámenes 2019–2026 del zip.</div>'+PR.map((p,i)=>`<div class="card"><b>${esc(p[0])}</b><pre>${esc(p[1])}</pre><button class="btn" data-cp="${i}">Copiar prompt</button></div>`).join('')}
+/* ---------- EVENTOS ---------- */
+document.addEventListener('change',e=>{const t=e.target,d=t.dataset;
+if(d.c){S.done[d.c]=t.checked;save();stats();plan()}
+else if(d.r){S.rev[d.r]=t.checked;save()}
+else if(d.er!==undefined){S.errs[+d.er].ok=t.checked;save()}
+else if(t.id=='im'){const f=t.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const j=JSON.parse(r.result);if(!j||typeof j.done!='object')throw 0;S=Object.assign(empty(),j);save();stats();plan();perf();err();alert('Progreso importado.')}catch(x){alert('El archivo no es una copia válida.')}};r.readAsText(f)}
+else if(['fs','fe','fw','fst'].includes(t.id))plan()});
+document.addEventListener('input',e=>{const t=e.target,d=t.dataset;if(d.n){S.notes[d.n]=t.value;save()}else if(d.p){S.perf[d.p]=t.value;save()}});
+document.addEventListener('click',e=>{const t=e.target,d=t.dataset;
+if(t.closest('#nav')&&d.t){document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b==t));['plan','syl','perf','err','prompts','cfg'].forEach(s=>$('#'+s).classList.toggle('hide',s!=d.t));if(d.t=='perf')perf();if(d.t=='err')err()}
+else if(d.cp!==undefined){copy(PR[+d.cp][1],t)}
+else if(t.id=='tod'){const o=document.querySelector('.day.today');if(o)o.scrollIntoView({behavior:'smooth'});else alert('Hoy está fuera del rango del plan (5 nov 2026 – 30 ene 2027).')}
+else if(t.id=='sa'){const n=$('#sn').value.trim(),c=+$('#sc').value,i=+$('#si').value;if(!n||c<0||i<0||c+i>40)return alert('Revisa el nombre y que aciertos + incorrectas no pasen de 40.');S.sims.push({n,c,i});save();perf()}
+else if(d.ds){S.sims.splice(+d.ds,1);save();perf()}
+else if(d.ur){delete S.rev[d.ur];save();perf();plan()}
+else if(t.id=='ea'){const x=$('#et').value.trim(),y=$('#ee').value.trim(),z=$('#ep').value.trim();if(!x&&!z)return;S.errs.unshift({t:x,e:y,p:z,ok:false});save();err()}
+else if(d.de){S.errs.splice(+d.de,1);save();err()}
+else if(t.id=='ex'){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,1)],{type:'application/json'}));a.download='progreso-uptp-'+new Date().toISOString().slice(0,10)+'.json';a.click()}
+else if(t.id=='rs'){if(confirm('¿Reiniciar TODO el progreso, notas y registros? No se puede deshacer.')){S=empty();save();stats();plan();perf();err()}}});
+$('#fw').innerHTML='<option value="">Todas las semanas</option>'+Array.from({length:13},(_,i)=>`<option value="${i+1}">Semana ${i+1}</option>`).join('');
+syl();cfg();prompts();stats();plan();perf();err();
+</script></body></html>
