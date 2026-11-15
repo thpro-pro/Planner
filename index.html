@@ -78,6 +78,27 @@ header,.w{position:relative;z-index:1}
 @keyframes bob{50%{transform:translateY(-6px) rotate(3deg)}}@keyframes shine{to{background-position:-200% 0}}@keyframes fl{to{transform:translateY(-110vh) rotate(40deg)}}
 @media (prefers-reduced-motion:reduce){#fx,#mascot,.bar i{animation:none}#fx{display:none}}
 </style>
+<style>
+.sm{padding:3px 10px;font-size:12.5px;margin:4px 6px 0 0}.mvr{margin-top:2px}.pill.ov{background:#fff1d6;color:#b45309}
+::selection{background:#ffc2dd}
+::-webkit-scrollbar{width:12px}::-webkit-scrollbar-thumb{background:#ffb0d2;border-radius:99px;border:3px solid #ffeef6}
+.btn,nav button{transition:transform .12s,background .12s}.btn:hover,nav button:hover{transform:translateY(-1px)}
+@media (min-width:900px){
+body{font-size:16px}
+.w{max-width:1240px;padding:0 28px}
+header{padding:26px 0 22px}h1{font-size:34px}.sub{font-size:15px}
+.st{grid-template-columns:repeat(6,1fr);gap:14px}.k{padding:12px 16px}.k b{font-size:28px}
+#mascot svg,#mascot img{width:120px;height:120px}
+nav{position:sticky;top:0;z-index:5;background:#ffeef6ee;backdrop-filter:blur(6px);padding:10px 0;margin:0 0 14px}
+#days{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+#days .wk{grid-column:1/-1;margin:14px 0 0}
+#days .day{margin:0;transition:transform .15s,box-shadow .15s}
+.day:hover{transform:translateY(-2px);box-shadow:0 6px 0 #ffc2dd88}
+.day.today:hover{box-shadow:0 0 0 4px #ff6fb133,0 6px 0 #ffc2dd88}
+.g{grid-template-columns:repeat(3,1fr)}
+}
+@media (min-width:1500px){.w{max-width:1400px}}
+</style>
 </head><body><div id="fx"></div>
 <header><div class="w"><div class="hd"><div><h1>🎀 Planificador UPTP 2027 · Ingeniería en Informática 🍓</h1>
 <div class="sub">5 nov 2026 → 16 feb 2027 · Examen escrito: 40 preguntas de opción múltiple, 2 h, en inglés, sin calculadora (Res. UPTP 228/2026)</div><div id="msg" class="bubble"></div></div><div id="mascot"></div></div>
@@ -186,7 +207,7 @@ return `${SHORT}\n\n${d}\n\nCrea 8 ejercicios de opción múltiple en inglés (A
 let pi=0,en=0;
 const day=i=>{const dt=new Date(2026,10,5+i),w=dt.getDay(),s=stOf(i),A=[],id=(k)=>`d${i}a${k}`;
 let obj='',phys=(i<57?[1,3,6]:[1,3,5,6]).includes(w);
-const add=(k,sub,min,t,det,links)=>A.push({id:id(k),sub,min,t,det,links:links||''});
+const add=(k,sub,min,t,det,links)=>A.push({id:id(k),k,h:i,sub,min,t,det,links:links||''});
 const physA=(k,min)=>{if(pi<seqP.length){const [x,y]=seqP[pi],b2=P[x];add(k,'f',min,`Física: ${b2[1]} · sesión ${y+1}/${b2[0]}`,`Contenido oficial (Anexo I B3): ${b2[2]}. Aprende fórmulas, unidades SI y despejes; resuelve 6 problemas con unidades y sin calculadora, y explica el tema en voz alta 3 min. Sin libro asignado: usa tu material.`,plinks(b2[3],b2[4]))}else add(k,'f',min,'Física: problemas mixtos y explicación oral','8 problemas de cualquier tema de física, con unidades y despejes; explica uno en voz alta.',plinks('problemas de fisica','physics problems'));pi++};
 const engA=(k,min)=>{const e=EN[en%EN.length];en++;add(k,'i',min,'Inglés: '+e[0],e[1],lk([['The Organic Chemistry Tutor','the organic chemistry tutor '+e[2]],['BBC Learning English / English with Lucy',e[3]]]))};
 if(i<67){const sm=mi(i),[bi,p]=sm>=0?seqM[sm]:[-1,0],b=M[bi]||{d:0},last=bi>=0&&p==b.d-1;
@@ -224,31 +245,42 @@ A.forEach(a=>{a.tm=/teoría y ejemplos/.test(a.t)?"15' teoría · 20' ejemplos �
 return{i,dt,s,obj,A}};
 const tmin=t=>{const [h,m]=(t||'17:00').split(':').map(Number);return h*60+m};
 const hm=x=>String(Math.floor(x/60)%24).padStart(2,'0')+':'+String(x%60).padStart(2,'0');
-function slots(d){const we=[0,6].includes(d.dt.getDay());let t=tmin(we?S.cfg.we:S.cfg.wd);const o={};d.A.forEach(a=>{o[a.id]=d.i==N-1?'según el horario oficial de la UPTP':hm(t)+'–'+hm(t+a.min);t+=a.min+10});return o}
+function slots(d){const we=[0,6].includes(d.dt.getDay());let t=tmin(we?S.cfg.we:S.cfg.wd);const o={};EA(d.i).forEach(a=>{o[a.id]=d.i==N-1?'según el horario oficial de la UPTP':hm(t)+'–'+hm(t+a.min);t+=a.min+10});return o}
 const DAYS=Array.from({length:N},(_,i)=>day(i));
 /* ---------- ESTADO ---------- */
-const empty=()=>({cfg:{wd:'17:00',we:'09:00'},done:{},notes:{},rev:{},sims:[],errs:[],perf:{dom:'',cue:'',fre:''}});
+const empty=()=>({cfg:{wd:'17:00',we:'09:00'},mv:{},mg:0,done:{},notes:{},rev:{},sims:[],errs:[],perf:{dom:'',cue:'',fre:''}});
 let S;try{S=Object.assign(empty(),JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){S=empty()}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){alert('No se pudo guardar en este navegador. Exporta tu progreso.')}};
 const $=s=>document.querySelector(s),esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const fd=d=>d.toLocaleDateString('es-PY',{weekday:'short',day:'numeric',month:'short'});
 const SN={m:'🧮 Mat',f:'⚡ Fís',i:'💬 Ing'},SC={m:'m',f:'f_',i:'i_'};
 const all=DAYS.flatMap(d=>d.A);
+/* ---------- MOVER TAREAS ---------- */
+const H=Object.fromEntries(all.map(a=>[a.id,a.h]));
+const EA=i=>all.filter(a=>(S.mv[a.id]??a.h)==i).sort((x,y)=>x.k-y.k||x.h-y.h);
+function mvNext(id){const a=all.find(x=>x.id==id);if(!a)return;const ef=x=>S.mv[x.id]??x.h;
+if(ef(a)+1>N-2)return alert('No hay un día siguiente disponible antes del examen.');
+const seen=new Set(),m={};let cur=a,to=ef(a)+1;
+while(cur){seen.add(cur.id);m[cur.id]=to;if(to>=N-2)break;cur=EA(to).find(x=>x.k==a.k&&!S.done[x.id]&&!seen.has(x.id));to++}
+for(const k in m){if(m[k]==H[k])delete S.mv[k];else S.mv[k]=m[k]}save();stats()}
+const mvui=a=>`<div class="mvr">${S.mv[a.id]!==undefined?`<span class="pill">↪ era del ${fd(DAYS[a.h].dt)}</span> <button class="btn sm" data-mb="${a.id}">↩ A su día</button> `:''}<button class="btn sm" data-mn="${a.id}" ${S.done[a.id]?'hidden':''}>➡️ Pasar a mañana</button></div>`;
+/* una sola vez: el 1.5 (día 6 del plan) pasa al domingo 15 nov (día 10) y el resto se corre 4 días; lo que no cabe antes del examen se queda en su día */
+if(!S.mg){S.mg=1;all.forEach(a=>{if(a.h>=6&&a.h<N-1&&!S.done[a.id]){const t=a.h+4;if(t<=N-2)S.mv[a.id]=t}});save()}
 /* ---------- VISTAS ---------- */
 function stats(){const t=new Date();t.setHours(0,0,0,0);const left=Math.max(0,Math.round((EXAM-t)/864e5));
 const pc=l=>l.length?Math.round(100*l.filter(a=>S.done[a.id]).length/l.length):0,bar=v=>`<div class="bar"><i style="width:${v}%"></i></div>`,o=pc(all);
-const td=DAYS.find(d=>+d.dt==+t),tl=td?td.A.filter(a=>S.done[a.id]).length+'/'+td.A.length:'—';
+const td=DAYS.find(d=>+d.dt==+t),te=td?EA(td.i):[],tl=td?te.filter(a=>S.done[a.id]).length+'/'+te.length:'—';
 $('#stats').innerHTML=`<div class="k"><b>${left}</b><small>días para el examen</small></div><div class="k"><b>${o}%</b><small>progreso general (${all.filter(a=>S.done[a.id]).length}/${all.length})</small>${bar(o)}</div>`+['m','f','i'].map(s=>{const l=all.filter(a=>a.sub==s),v=pc(l);return `<div class="k"><b>${v}%</b><small>${{m:'Matemáticas',f:'Física',i:'Inglés'}[s]}</small>${bar(v)}</div>`}).join('')+`<div class="k"><b>${tl}</b><small>tareas de hoy</small></div>`}
 const capture=()=>({y:window.scrollY,d:[...document.querySelectorAll('.day[open]')].map(x=>x.dataset.d),a:[...document.querySelectorAll('.det[open] [data-n]')].map(x=>x.dataset.n)});
 function restore(st){document.querySelectorAll('.day').forEach(x=>{x.open=st.d.includes(x.dataset.d)});document.querySelectorAll('.det').forEach(x=>{const n=x.querySelector('[data-n]');if(n)x.open=st.a.includes(n.dataset.n)});window.scrollTo(0,st.y)}
-function upd(t){const act=t.closest('.act');if(act)act.classList.toggle('ok',t.checked);const dy=t.closest('.day');if(!dy)return;const d=DAYS[+dy.dataset.d],n=d.A.filter(a=>S.done[a.id]).length,c=dy.querySelector('.cnt');if(c)c.textContent=`${n}/${d.A.length}${n==d.A.length?' 🌸':''} · ${d.A.reduce((s,a)=>s+a.min,0)} min`}
+function upd(t){const act=t.closest('.act');if(act){act.classList.toggle('ok',t.checked);const b=act.querySelector('[data-mn]');if(b)b.hidden=t.checked}const dy=t.closest('.day');if(!dy)return;const E=EA(+dy.dataset.d),n=E.filter(a=>S.done[a.id]).length,c=dy.querySelector('.cnt');if(c)c.textContent=`${n}/${E.length}${n==E.length&&E.length?' 🌸':''} · ${E.reduce((s,a)=>s+a.min,0)} min`}
 function plan(keep){const st=keep?capture():null;const fs=$('#fs').value,fe=$('#fe').value,fw=$('#fw').value,fst=$('#fst').value,t=new Date();t.setHours(0,0,0,0);let h='',lw=-1;
 DAYS.forEach(d=>{const wk=Math.floor(d.i/7)+1;if(fe&&+fe!=d.s||fw&&+fw!=wk)return;
-const L=d.A.filter(a=>(!fs||a.sub==fs)&&(!fst||(fst=='h')==!!S.done[a.id]));if(!L.length)return;
+const E=EA(d.i),L=E.filter(a=>(!fs||a.sub==fs)&&(!fst||(fst=='h')==!!S.done[a.id]));if(!L.length&&(fs||fst||E.length))return;
 if(wk!=lw){lw=wk;h+=`<div class="wk">Semana ${wk} <small>· Etapa ${d.s}: ${ST[d.s]}</small></div>`}
-const n=d.A.filter(a=>S.done[a.id]).length,isT=+d.dt==+t,sl=slots(d);
-h+=`<details class="day${isT?' today':''}" data-d="${d.i}" ${isT?'open':''}><summary><b>${fd(d.dt)}</b><span class="pill">Etapa ${d.s}</span><span class="pill cnt">${n}/${d.A.length}${n==d.A.length?' 🌸':''} · ${d.A.reduce((s,a)=>s+a.min,0)} min</span><span class="mini">${esc(d.obj)}</span></summary>`+
-L.map(a=>`<div class="act${S.done[a.id]?' ok':''}"><div class="r1"><input type="checkbox" data-c="${a.id}" ${S.done[a.id]?'checked':''}><div><span class="tg ${SC[a.sub]}">${SN[a.sub]}</span><span class="t">${esc(a.t)}</span> <span class="mini">${a.min} min</span><div class="mini">🕐 ${sl[a.id]} · ⏱ ${esc(a.tm)}</div>
+const n=E.filter(a=>S.done[a.id]).length,tot=E.reduce((s,a)=>s+a.min,0),isT=+d.dt==+t,sl=slots(d);
+h+=`<details class="day${isT?' today':''}" data-d="${d.i}" ${isT?'open':''}><summary><b>${fd(d.dt)}</b><span class="pill">Etapa ${d.s}</span><span class="pill cnt">${n}/${E.length}${n==E.length&&E.length?' 🌸':''} · ${tot} min</span>${tot>300?'<span class="pill ov">⚠️ día cargado</span>':''}<span class="mini">${esc(E.length?DAYS[E[0].h].obj:'Día libre 🌿')}</span></summary>`+
+L.map(a=>`<div class="act${S.done[a.id]?' ok':''}"><div class="r1"><input type="checkbox" data-c="${a.id}" ${S.done[a.id]?'checked':''}><div><span class="tg ${SC[a.sub]}">${SN[a.sub]}</span><span class="t">${esc(a.t)}</span> <span class="mini">${a.min} min</span><div class="mini">🕐 ${sl[a.id]} · ⏱ ${esc(a.tm)}</div>${mvui(a)}
 <details class="det"><summary class="mini">Detalles, recursos y notas</summary><p>${esc(a.det)}</p>${a.links?`<p>${a.links}</p>`:''}<p><button class="btn" data-cpa="${a.id}">💌 Copiar prompt de esta actividad</button></p><label class="mini"><input type="checkbox" data-r="${a.id}" ${S.rev[a.id]?'checked':''}> Marcar para repasar</label><textarea data-n="${a.id}" placeholder="Notas: dificultades, errores…">${esc(S.notes[a.id]||'')}</textarea></details></div></div></div>`).join('')+'</details>'});
 $('#days').innerHTML=h||'<p>No hay actividades con esos filtros.</p>';if(st)restore(st)}
 function syl(){$('#syl').innerHTML=`<h2>Temario oficial ↔ Stewart Precalculus 7.ª ed.</h2><p class="mini">El examen escrito evalúa Matemáticas (Anexo I, A). Física e Inglés corresponden al examen oral (entrevista personal y técnica, Anexo I, B). Tu PDF tiene 13 capítulos, un Prólogo y el Apéndice A (no existe un capítulo 14; antes lo mencioné por error). Todas las secciones están en el plan: 12.4 y 12.5 aparecen como complemento en la Etapa 3, y los 13 «Focus on Modeling», el Prólogo y el Apéndice A como actividad «Complemento». Estos complementos no están nombrados literalmente en el Anexo I salvo por la competencia de modelación; los puse porque pediste cubrir todo.</p><table><tr><th>Orden</th><th>Tema (agrupado)</th><th>Stewart</th><th>Conceptos y procedimientos</th><th>Prior.</th><th>Examen 2026</th><th>Por qué juntos / errores</th></tr>`+M.map((b,i)=>`<tr><td>${i+1}</td><td>${b.t}</td><td>${b.c}</td><td>${b.k}</td><td>${{A:'Alta',M:'Media',B:'Baja'}[b.p]}</td><td>${b.r}</td><td>${b.w}</td></tr>`).join('')+`</table><h2>Física (entrevista técnica, Anexo I B3)</h2><table>`+P.map(b=>`<tr><td>${b[1]}</td><td>${b[2]}</td></tr>`).join('')+'</table><h2>Complementos del libro</h2><table><tr><td>Prólogo: Principles of Problem Solving (p. P1)</td><td>5 nov</td></tr>'+Object.values(FM).map(f=>`<tr><td>${f[0]}</td><td>${f[1]}</td></tr>`).join('')+'<tr><td>12.4 Mathematics of Finance y 12.5 Mathematical Induction</td><td>Etapa 3</td></tr></table>'}
@@ -256,7 +288,7 @@ function perf(){const p=S.perf;$('#perf').innerHTML=`<h2>Mi rendimiento</h2><div
 <div class="card"><b>Temas marcados para repasar</b>${Object.keys(S.rev).filter(k=>S.rev[k]).map(k=>{const a=all.find(x=>x.id==k);return a?`<div>• ${esc(a.t)} <button class="btn" data-ur="${k}">Quitar</button></div>`:''}).join('')||'<div class="mini">Ninguno. Márcalos dentro de cada actividad.</div>'}</div>
 <div class="card"><b>Resultados de simulacros</b><div class="f"><input id="sn" placeholder="Nombre"><input id="sc" type="number" min="0" max="40" placeholder="Aciertos"><input id="si" type="number" min="0" max="40" placeholder="Incorrectas"><button class="btn" id="sa">Registrar</button></div><div class="mini">Puntaje al estilo del Examen 2026: 20 + 2·aciertos − 0.5·incorrectas (tomado de la hoja de instrucciones de 2026; confirma la regla de 2027).</div><table><tr><th>Simulacro</th><th>Aciertos</th><th>% de 40</th><th>Puntaje</th><th></th></tr>${S.sims.map((s,i)=>`<tr><td>${esc(s.n)}</td><td>${s.c}</td><td>${Math.round(100*s.c/40)}%</td><td>${20+2*s.c-0.5*s.i}</td><td><button class="btn" data-ds="${i}">Borrar</button></td></tr>`).join('')}</table></div>`}
 function err(){$('#err').innerHTML=`<h2>Repaso de errores</h2><div class="card g"><input id="et" placeholder="Tema"><input id="ee" placeholder="Ejercicio (ej. Examen 2024, P17)"><textarea id="ep" placeholder="Procedimiento correcto"></textarea><button class="btn" id="ea">Agregar</button></div>`+S.errs.map((e,i)=>`<div class="card"><label><input type="checkbox" data-er="${i}" ${e.ok?'checked':''}> <b>${esc(e.t)}</b> — ${esc(e.e)}</label><div>${esc(e.p)}</div><button class="btn d" data-de="${i}">Borrar</button></div>`).join('')}
-function cfg(){$('#cfg').innerHTML=`<h2>Copia de seguridad</h2><div class="card"><p>El progreso se guarda solo en este navegador (localStorage). Exporta un archivo para conservarlo o llevarlo a otra computadora.</p><div class="f"><button class="btn" id="ex">Exportar progreso</button><input type="file" id="im" accept=".json"><button class="btn d" id="rs">Reiniciar progreso</button></div></div><h2>Mascota kawaii</h2><div class="card"><p>Puedes poner tu propia imagen (tu personaje o fondo favorito) como mascota del encabezado. Se guarda solo en tu navegador.</p><div class="f"><input type="file" id="mi" accept="image/*"><button class="btn" id="mr">Quitar mi imagen</button></div></div>`}
+function cfg(){$('#cfg').innerHTML=`<h2>Copia de seguridad</h2><div class="card"><p>El progreso se guarda solo en este navegador (localStorage). Exporta un archivo para conservarlo o llevarlo a otra computadora.</p><div class="f"><button class="btn" id="ex">Exportar progreso</button><input type="file" id="im" accept=".json"><button class="btn d" id="rs">Reiniciar progreso</button></div></div><h2>Fechas de las tareas</h2><div class="card"><p>Con «➡️ Pasar a mañana» una tarea se mueve al día siguiente y la que estaba ahí se corre al otro día, y así en cadena. Aquí puedes dejar todo como en el plan original.</p><button class="btn d" id="mx">Devolver todas a su día original</button></div><h2>Mascota kawaii</h2><div class="card"><p>Puedes poner tu propia imagen (tu personaje o fondo favorito) como mascota del encabezado. Se guarda solo en tu navegador.</p><div class="f"><input type="file" id="mi" accept="image/*"><button class="btn" id="mr">Quitar mi imagen</button></div></div>`}
 
 const CTX='Contexto: voy a rendir el examen de admisión 2027 de la UPTP (Ingeniería en Informática). Es un examen escrito de 40 preguntas de opción múltiple (opciones A–E, una sola correcta), 2 horas, EN INGLÉS, sin calculadora ni diccionario. Evalúa solo Matemáticas nivel precálculo (tipo Stewart): números reales y complejos, potencias y raíces, álgebra (ecuaciones, inecuaciones, factorización), geometría analítica, funciones polinomiales/racionales/exponenciales/logarítmicas, trigonometría, polares y paramétricas, vectores 2D/3D, sistemas y matrices, cónicas, sucesiones y series, binomio, límites, derivadas e introducción a áreas. Mi punto más débil es el álgebra.';
 const PR=[
@@ -278,7 +310,7 @@ document.addEventListener('change',e=>{const t=e.target,d=t.dataset;
 if(d.c){S.done[d.c]=t.checked;save();stats();if($('#fst').value)plan(true);else upd(t)}
 else if(d.r){S.rev[d.r]=t.checked;save()}
 else if(d.er!==undefined){S.errs[+d.er].ok=t.checked;save()}
-else if(t.id=='im'){const f=t.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const j=JSON.parse(r.result);if(!j||typeof j.done!='object')throw 0;S=Object.assign(empty(),j);save();stats();plan();perf();err();alert('Progreso importado.')}catch(x){alert('El archivo no es una copia válida.')}};r.readAsText(f)}
+else if(t.id=='im'){const f=t.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const j=JSON.parse(r.result);if(!j||typeof j.done!='object')throw 0;S=Object.assign(empty(),j);S.mg=1;S.mv=S.mv||{};save();stats();plan();perf();err();alert('Progreso importado.')}catch(x){alert('El archivo no es una copia válida.')}};r.readAsText(f)}
 else if(t.id=='mi'){const f=t.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),k=Math.min(1,240/Math.max(im.width,im.height));c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);S.cfg.img=c.toDataURL('image/jpeg',0.85);save();mascot()};im.onerror=()=>alert('No pude leer esa imagen.');im.src=r.result};r.readAsDataURL(f)}
 else if(t.id=='twd'||t.id=='twe'){S.cfg[t.id=='twd'?'wd':'we']=t.value||(t.id=='twd'?'17:00':'09:00');save();plan()}
 else if(['fs','fe','fw','fst'].includes(t.id))plan()});
@@ -288,6 +320,9 @@ if(t.closest('#nav')&&d.t){document.querySelectorAll('#nav button').forEach(b=>b
 else if(d.cp!==undefined){copy(PR[+d.cp][1],t)}
 else if(d.cpa){const a=all.find(x=>x.id==d.cpa);if(a)copy(dayPrompt(a),t)}
 else if(t.id=='mr'){delete S.cfg.img;save();mascot()}
+else if(d.mn){mvNext(d.mn);plan(true)}
+else if(d.mb){delete S.mv[d.mb];save();stats();plan(true)}
+else if(t.id=='mx'){if(confirm('¿Devolver todas las tareas movidas a su día original?')){S.mv={};S.mg=1;save();stats();plan(true)}}
 else if(t.id=='tod'){const o=document.querySelector('.day.today');if(o)o.scrollIntoView({behavior:'smooth'});else alert('Hoy está fuera del rango del plan (5 nov 2026 – 16 feb 2027).')}
 else if(t.id=='sa'){const n=$('#sn').value.trim(),c=+$('#sc').value,i=+$('#si').value;if(!n||c<0||i<0||c+i>40)return alert('Revisa el nombre y que aciertos + incorrectas no pasen de 40.');S.sims.push({n,c,i});save();perf()}
 else if(d.ds){S.sims.splice(+d.ds,1);save();perf()}
@@ -295,7 +330,7 @@ else if(d.ur){delete S.rev[d.ur];save();perf();plan()}
 else if(t.id=='ea'){const x=$('#et').value.trim(),y=$('#ee').value.trim(),z=$('#ep').value.trim();if(!x&&!z)return;S.errs.unshift({t:x,e:y,p:z,ok:false});save();err()}
 else if(d.de){S.errs.splice(+d.de,1);save();err()}
 else if(t.id=='ex'){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,1)],{type:'application/json'}));a.download='progreso-uptp-'+new Date().toISOString().slice(0,10)+'.json';a.click()}
-else if(t.id=='rs'){if(confirm('¿Reiniciar TODO el progreso, notas y registros? No se puede deshacer.')){S=empty();save();stats();plan();perf();err()}}});
+else if(t.id=='rs'){if(confirm('¿Reiniciar TODO el progreso, notas y registros? No se puede deshacer.')){S=empty();S.mg=1;save();stats();plan();perf();err()}}});
 $('#fw').innerHTML='<option value="">Todas las semanas</option>'+Array.from({length:15},(_,i)=>`<option value="${i+1}">Semana ${i+1}</option>`).join('');
 const BUN='<svg viewBox="0 0 100 100" width="88" height="88"><ellipse cx="33" cy="22" rx="9" ry="20" fill="#fff" stroke="#ffb0d2" stroke-width="3"/><ellipse cx="33" cy="25" rx="4" ry="12" fill="#ffc2dd"/><ellipse cx="67" cy="22" rx="9" ry="20" fill="#fff" stroke="#ffb0d2" stroke-width="3"/><ellipse cx="67" cy="25" rx="4" ry="12" fill="#ffc2dd"/><circle cx="50" cy="63" r="32" fill="#fff" stroke="#ffb0d2" stroke-width="3"/><ellipse cx="39" cy="61" rx="3.5" ry="5" fill="#5a2a4a"/><ellipse cx="61" cy="61" rx="3.5" ry="5" fill="#5a2a4a"/><circle cx="30" cy="71" r="5" fill="#ff9ec8" opacity=".7"/><circle cx="70" cy="71" r="5" fill="#ff9ec8" opacity=".7"/><path d="M45 71q5 5 10 0" stroke="#5a2a4a" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M50 36L35 28V44Z M50 36L65 28V44Z" fill="#ff6fb1"/><circle cx="50" cy="36" r="4.5" fill="#ff4f9f"/></svg>';
 const MSG=['¡Ganbatte! Un ejercicio a la vez ✨','Cada paso cuenta, tú puedes 🎀','Poquito a poquito se llega lejos 🍓','Hoy también vas a brillar ⭐','Respira, hidrátate y sigue 🌸','Los errores son pistas, no fracasos 💗','Un día más cerca de tu meta ✧','Tú eres más fuerte que el álgebra 🐰'];
